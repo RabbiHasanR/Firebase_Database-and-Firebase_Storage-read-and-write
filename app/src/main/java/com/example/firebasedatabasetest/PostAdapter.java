@@ -1,5 +1,7 @@
 package com.example.firebasedatabasetest;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +16,11 @@ import butterknife.ButterKnife;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder>{
     List<Post> posts;
+    Context context;
 
-    public PostAdapter(List<Post> posts) {
+    public PostAdapter(List<Post> posts,Context context) {
         this.posts=posts;
+        this.context=context;
     }
 
     @Override
@@ -35,6 +39,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder>{
         holder.phoneTxt.setText(post.getMobileNumber());
         holder.rentTxt.setText(post.getRent());
         holder.availableDateTxt.setText(post.getAvailableDate());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(context.getApplicationContext(),PostDetailsActivity.class);
+                intent.putExtra("key",post.getKey());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

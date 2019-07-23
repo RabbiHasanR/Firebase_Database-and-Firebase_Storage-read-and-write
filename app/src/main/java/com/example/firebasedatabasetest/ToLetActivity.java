@@ -35,9 +35,8 @@ public class ToLetActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private List<Post> posts = new ArrayList<>();
-    private List<Photo> photos=new ArrayList<>();
     private String type;
-    private DatabaseReference myRef2;
+//    private DatabaseReference myRef2;
 
     @BindView(R.id.my_recycler_view)
     RecyclerView recyclerView;
@@ -51,8 +50,6 @@ public class ToLetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_to_let);
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("Posts");
-        myRef2= database.getReference().child("Photos");
-        sliderView=(SliderView)findViewById(R.id.imageSlider);
         ButterKnife.bind(this);
         Intent intent=getIntent();
         if(intent.hasExtra("type")){
@@ -60,15 +57,6 @@ public class ToLetActivity extends AppCompatActivity {
             setPostOnRecyclerview();
         }
     }
-//    private void retrivePhoto(String key){
-//        ref.child(key).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//            @Override
-//            public void onSuccess(Uri uri) {
-//                Log.d("Uri:",String.valueOf(uri));
-//                Toast.makeText(ToLetActivity.this, String.valueOf(uri), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
     /**
      * set post on recyclerview
      */
@@ -85,42 +73,7 @@ public class ToLetActivity extends AppCompatActivity {
                      */
                     if(post.getType().equalsIgnoreCase(type)){
                         posts.add(post);
-                        myRef2.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for(DataSnapshot dataSnapshot2:dataSnapshot.child(post.getKey()).getChildren()){
-                                    Photo photo=dataSnapshot2.getValue(Photo.class);
-                                    photos.add(photo);
-                                }
-//                                for(Photo photo1:photos){
-//                                    Log.d("Uri:",photo1.getUri());
-//                                }
-//                                Log.d("photos:",String.valueOf(photos.isEmpty()));
-                                if(!photos.isEmpty()){
-                                    SliderAdapter adapter = new SliderAdapter(photos);
-                                    sliderView.setSliderAdapter(adapter);
-
-                                    sliderView.setIndicatorAnimation(IndicatorAnimations.SLIDE); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
-                                    sliderView.setSliderTransformAnimation(SliderAnimations.CUBEINROTATIONTRANSFORMATION);
-                                    sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
-                                    sliderView.setIndicatorSelectedColor(Color.WHITE);
-                                    sliderView.setIndicatorUnselectedColor(Color.GRAY);
-                                    sliderView.startAutoCycle();
-
-                                    sliderView.setOnIndicatorClickListener(new DrawController.ClickListener() {
-                                        @Override
-                                        public void onIndicatorClicked(int position) {
-                                            sliderView.setCurrentPagePosition(position);
-                                        }
-                                    });
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
+                       retrivePhotos(post.getKey());
                     }
                 }
                 Log.d("Posts:",String.valueOf(posts.isEmpty()));
@@ -131,7 +84,7 @@ public class ToLetActivity extends AppCompatActivity {
                 else {
                     recyclerView.setVisibility(View.VISIBLE);
                     emptyTextView.setVisibility(View.INVISIBLE);
-                    PostAdapter recycler = new PostAdapter(posts);
+                    PostAdapter recycler = new PostAdapter(posts,ToLetActivity.this);
                     RecyclerView.LayoutManager layoutmanager = new LinearLayoutManager(ToLetActivity.this);
                     recyclerView.setLayoutManager(layoutmanager);
                     recyclerView.setItemAnimator( new DefaultItemAnimator());
@@ -142,6 +95,49 @@ public class ToLetActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
                 Toast.makeText(ToLetActivity.this, "Failed to retrive data", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * retrive photos download url from firebase database
+     * @param key
+     */
+    private void retrivePhotos(String key){
+        List<Photo> photos=new ArrayList<>();
+        DatabaseReference myRef2= database.getReference().child("Photos");
+        myRef2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot dataSnapshot2:dataSnapshot.child(key).getChildren()){
+                    Photo photo=dataSnapshot2.getValue(Photo.class);
+                    photos.add(photo);
+                }
+                if(!photos.isEmpty()){
+                    sliderView=findViewById(R.id.imageSlider);
+                    final SliderAdapter adapter = new SliderAdapter(photos);
+                    Log.d("Size:", String.valueOf(photos.size()));
+                    sliderView.setSliderAdapter(adapter);
+                    sliderView.setIndicatorAnimation(IndicatorAnimations.SLIDE); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+                    sliderView.setSliderTransformAnimation(SliderAnimations.CUBEINROTATIONTRANSFORMATION);
+                    sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
+                    sliderView.setIndicatorSelectedColor(Color.WHITE);
+                    sliderView.setIndicatorUnselectedColor(Color.GRAY);
+                    sliderView.startAutoCycle();
+
+                    sliderView.setOnIndicatorClickListener(new DrawController.ClickListener() {
+                        @Override
+                        public void onIndicatorClicked(int position) {
+                            sliderView.setCurrentPagePosition(position);
+                            Toast.makeText(ToLetActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }

@@ -48,7 +48,7 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
             case 0:
                 photo=photos.get(position);
                 uri=Uri.parse(photo.getUri());
-                viewHolder.textViewDescription.setText(position);
+                viewHolder.textViewDescription.setText(String.valueOf(position));
                 viewHolder.textViewDescription.setTextSize(16);
                 viewHolder.textViewDescription.setTextColor(Color.WHITE);
                 Glide.with(viewHolder.itemView)
@@ -59,7 +59,7 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
             case 1:
                 photo=photos.get(position);
                 uri=Uri.parse(photo.getUri());
-                viewHolder.textViewDescription.setText(position);
+                viewHolder.textViewDescription.setText(String.valueOf(position));
                 viewHolder.textViewDescription.setTextSize(16);
                 viewHolder.textViewDescription.setTextColor(Color.WHITE);
                 Glide.with(viewHolder.itemView)
@@ -70,7 +70,7 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
             case 2:
                 photo=photos.get(position);
                 uri=Uri.parse(photo.getUri());
-                viewHolder.textViewDescription.setText(position);
+                viewHolder.textViewDescription.setText(String.valueOf(position));
                 viewHolder.textViewDescription.setTextSize(16);
                 viewHolder.textViewDescription.setTextColor(Color.WHITE);
                 Glide.with(viewHolder.itemView)
@@ -81,7 +81,7 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
             case 3:
                 photo=photos.get(position);
                 uri=Uri.parse(photo.getUri());
-                viewHolder.textViewDescription.setText(position);
+                viewHolder.textViewDescription.setText(String.valueOf(position));
                 viewHolder.textViewDescription.setTextSize(16);
                 viewHolder.textViewDescription.setTextColor(Color.WHITE);
                 Glide.with(viewHolder.itemView)
@@ -92,7 +92,7 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
             case 4:
                 photo=photos.get(position);
                 uri=Uri.parse(photo.getUri());
-                viewHolder.textViewDescription.setText(position);
+                viewHolder.textViewDescription.setText(String.valueOf(position));
                 viewHolder.textViewDescription.setTextSize(16);
                 viewHolder.textViewDescription.setTextColor(Color.WHITE);
                 Glide.with(viewHolder.itemView)
