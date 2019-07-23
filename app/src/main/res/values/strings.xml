@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">FirebaseDatabaseTest</string>
+    <string-array name="tolet_type">
+        <item>Flat</item>
+        <item>Mess</item>
+        <item>Sublet</item>
+        <item>Hostel</item>
+        <item>Office</item>
+        <item>Garage</item>
+    </string-array>
+</resources>
